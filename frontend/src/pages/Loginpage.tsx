@@ -1,26 +1,31 @@
-import React, { useState,useRef } from "react"
-import axios from "axios"
+import React, { useRef,useEffect } from "react"
+import { useNavigate} from "react-router-dom"
+import { useSelector,useDispatch } from "react-redux"
+import { AppDispach,RootState } from "../redux/store"
+import {login} from './../redux/slices/authSlice'
 
 
 export default function Loginpage(): JSX.Element {
-    const [error, setError] = useState<boolean>(false)
+    
     const emailref=useRef<HTMLInputElement>(null)
     const passwordref=useRef<HTMLInputElement>(null)
-
+    const auth=useSelector((state:RootState)=>state.auth)
+    const dispatch=useDispatch<AppDispach>()
+    const navigate=useNavigate()
   const handleloggin=async (e:React.MouseEvent<HTMLButtonElement>)=>{
     e.preventDefault();
    if(emailref&&emailref.current&&passwordref&&passwordref.current){
-    try {
-      const req= await axios.post('http://localhost:9090/api/auth/login',{email:emailref.current.value,password:passwordref.current.value})
-      setError(false)
-      console.log(req.data.user)
-     } catch (error) {
-      setError(true)
-      console.log(error)
-     }
+    dispatch(login({email:emailref.current.value,password:passwordref.current.value}))
+   }
+   
+   
    }
 
-  }
+  useEffect(() => {
+    if(auth.isSuccess){
+      navigate('/')
+    }
+   },[auth, navigate])
 
 
   return (
@@ -72,7 +77,7 @@ export default function Loginpage(): JSX.Element {
               Sign in
             </button>
           </div>
-          {error&&<span className="text-center my-2 text-red-500">username or password incoorect !</span>}
+          {auth.isError&&<span className="text-center my-2 text-red-500">invalid password or email!!</span>}
           <p className="text-center text-sm text-gray-500">
             Don&#x27;t have an account yet?
             <a href="#!" className="font-semibold text-gray-600 hover:underline focus:text-gray-800 focus:outline-none">

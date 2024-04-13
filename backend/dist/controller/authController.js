@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.register = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userModel_1 = __importDefault(require("../models/userModel"));
+const generateToken_1 = __importDefault(require("../utils/generateToken"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.body;
     try {
@@ -38,7 +40,6 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     const { email, password } = req.body;
     try {
         const user = yield userModel_1.default.findOne({ email });
-        console.log(user);
         if (!user) {
             res.status(400);
             throw new Error("Invalid email or password");
@@ -48,13 +49,16 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
             res.status(400);
             throw new Error("Invalid email or password");
         }
-        return res.status(200).json({ message: "success",
-            user: {
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role
-            } });
+        if (user) {
+            (0, generateToken_1.default)(res, user._id);
+            return res.status(200).json({ message: "success",
+                user: {
+                    _id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role
+                } });
+        }
     }
     catch (error) {
         res.status(400);
@@ -62,3 +66,24 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.login = login;
+const protect = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    let token;
+    token = req.cookies.jwt;
+    let secrete = process.env.JWT_SECRET || "";
+    if (token) {
+        try {
+            const decoded = jsonwebtoken_1.default.verify(token, secrete);
+            const user = yield userModel_1.default.findById(decoded.id);
+            req.user = user;
+            next();
+        }
+        catch (error) {
+            res.status(401);
+            throw new Error("Not authorized, token failed");
+        }
+    }
+    if (!token) {
+        res.status(401);
+        throw new Error("you are not logged in");
+    }
+});

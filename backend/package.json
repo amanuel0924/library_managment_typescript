@@ -24,10 +24,12 @@
     "express": "^4.19.2",
     "express-async-handler": "^1.2.0",
     "joi": "^17.12.3",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.1",
     "rimraf": "^5.0.5"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
     "nodemon": "^3.1.0"
   }
 }

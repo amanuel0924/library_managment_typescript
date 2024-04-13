@@ -5,3 +5,8 @@ export type User = {
     email: string;
     password: string;
     };
+
+export interface LoginUserPlaylod{
+    email:string,
+    password:string
+}
