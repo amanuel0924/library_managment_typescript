@@ -1,12 +1,12 @@
-import { Request,Response,NextFunction } from "express";
+import e, { Request,Response,NextFunction } from "express";
 import { IUser } from "../models/types";
 import bcrypt from 'bcrypt'
 import User,{IUserModel} from "../models/userModel";
 import generateToken from "../utils/generateToken";
 import jwt from 'jsonwebtoken'
 
-interface CustomRequest extends Request {
-    user: IUserModel | null;
+export interface CustomRequest extends Request {
+    user?: IUserModel | null;
 }
 
 export const register=async (req:Request,res:Response,next: NextFunction)=>{
@@ -16,7 +16,8 @@ export const register=async (req:Request,res:Response,next: NextFunction)=>{
    
      const hashedPassword=await bcrypt.hash(user.password,10);
         const newUser:IUserModel=await User.create({...user,password:hashedPassword});
-        
+        if(newUser){
+          generateToken(res,newUser._id)
         return res.status(201).json({message:"success",
         user:{
             _id:newUser._id,
@@ -24,7 +25,7 @@ export const register=async (req:Request,res:Response,next: NextFunction)=>{
             email:newUser.email,
             role:newUser.role
         }});
-        
+      }
     
  } catch (error:any) {
          res.status(400);
@@ -63,25 +64,29 @@ export const login=async (req:Request,res:Response,next: NextFunction)=>{
     }
 }
 
-const protect = async (req:CustomRequest, res:Response, next:NextFunction) => {
+export const protect = async (req:CustomRequest, res:Response, next:NextFunction) => {
     let token:string
-    token = req.cookies.jwt
-    let secrete:string=process.env.JWT_SECRET||""
+   
+    try {
+      token = req.cookies.jwt
+      let secrete:string=process.env.JWT_SECRET||""
+
     if (token) {
-      try {
+   
         const decoded = jwt.verify(token, secrete)as {id:string}
         const user= await User.findById(decoded.id)
         req.user=user
-        next()
+        next() 
+       }
+        else{
+          res.status(401)
+          next(new Error('you are not loged in'));
+        }
       } catch (error) {
         res.status(401)
-        throw new Error("Not authorized, token failed")
+        next(new Error('Not authorized, token failed'));
       }
-    }
-    if (!token) {
-      res.status(401)
-      throw new Error("you are not logged in")
-    }
+    
   }
 
 

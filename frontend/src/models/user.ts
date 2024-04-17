@@ -10,3 +10,10 @@ export interface LoginUserPlaylod{
     email:string,
     password:string
 }
+
+export interface RegisterUserPlaylod {
+    role: 'admin' | 'employee' | 'member';
+    name: string;
+    email: string;
+    password: string;
+}

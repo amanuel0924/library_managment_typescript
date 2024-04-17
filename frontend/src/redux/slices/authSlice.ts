@@ -1,6 +1,6 @@
 import { createAsyncThunk,createSlice} from "@reduxjs/toolkit";
 
-import { LoginUserPlaylod, User } from "../../models/user";
+import { LoginUserPlaylod,RegisterUserPlaylod, User, } from "../../models/user";
 import axios  from "axios";
 
 interface AuthSliceState{
@@ -20,7 +20,8 @@ const initialState:AuthSliceState={
 }
 
 const login=createAsyncThunk("auth/login",async(user:LoginUserPlaylod,thunkAPI)=>{
-    try {
+    try { 
+        axios.defaults.withCredentials=true
         const response= await axios.post("http://localhost:9090/api/auth/login",user) 
         if(response.data){
             localStorage.setItem('user',JSON.stringify(response.data.user))
@@ -30,6 +31,19 @@ const login=createAsyncThunk("auth/login",async(user:LoginUserPlaylod,thunkAPI)=
         
         return thunkAPI.rejectWithValue(" invalid email or password")
     }
+})
+
+const register=createAsyncThunk("auth/register",async(user:RegisterUserPlaylod,thunkAPI)=>{
+    try {
+        axios.defaults.withCredentials=true
+        const response= await axios.post('http://localhost:9090/api/auth/register',user)
+        if(response.data){
+            localStorage.setItem('user',JSON.stringify(response.data.user))
+            return response.data.user
+    }
+        } catch (error) {
+            return thunkAPI.rejectWithValue(" invalid email or password")
+        }
 })
 
 const AuthSlice= createSlice({
@@ -51,12 +65,26 @@ const AuthSlice= createSlice({
             state.isError=true
             state.user=undefined
             state.message=actions.payload as string
-            
-    
-            
+        })
+
+        builder.addCase(register.pending,(state)=>{
+            state.isLoading=true
+        })
+        builder.addCase(register.fulfilled,(state,actions)=>{
+            state.isLoading=false
+            state.isSuccess=true
+            state.user=actions.payload
+            state.message='user registered success fuly'
+        })
+        builder.addCase(register.rejected,(state,actions)=>{
+            state.isLoading=false
+            state.isSuccess=false
+            state.isError=true
+            state.user=undefined
+            state.message=actions.payload as string
         })
     }
 })
-//export login actions
-export {login}
+
+export {login,register}
 export default AuthSlice.reducer

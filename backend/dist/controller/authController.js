@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.register = void 0;
+exports.protect = exports.login = exports.register = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userModel_1 = __importDefault(require("../models/userModel"));
 const generateToken_1 = __importDefault(require("../utils/generateToken"));
@@ -22,13 +22,16 @@ const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     try {
         const hashedPassword = yield bcrypt_1.default.hash(user.password, 10);
         const newUser = yield userModel_1.default.create(Object.assign(Object.assign({}, user), { password: hashedPassword }));
-        return res.status(201).json({ message: "success",
-            user: {
-                _id: newUser._id,
-                name: newUser.name,
-                email: newUser.email,
-                role: newUser.role
-            } });
+        if (newUser) {
+            (0, generateToken_1.default)(res, newUser._id);
+            return res.status(201).json({ message: "success",
+                user: {
+                    _id: newUser._id,
+                    name: newUser.name,
+                    email: newUser.email,
+                    role: newUser.role
+                } });
+        }
     }
     catch (error) {
         res.status(400);
@@ -68,22 +71,23 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
 exports.login = login;
 const protect = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let token;
-    token = req.cookies.jwt;
-    let secrete = process.env.JWT_SECRET || "";
-    if (token) {
-        try {
+    try {
+        token = req.cookies.jwt;
+        let secrete = process.env.JWT_SECRET || "";
+        if (token) {
             const decoded = jsonwebtoken_1.default.verify(token, secrete);
             const user = yield userModel_1.default.findById(decoded.id);
             req.user = user;
             next();
         }
-        catch (error) {
+        else {
             res.status(401);
-            throw new Error("Not authorized, token failed");
+            next(new Error('you are not loged in'));
         }
     }
-    if (!token) {
+    catch (error) {
         res.status(401);
-        throw new Error("you are not logged in");
+        next(new Error('Not authorized, token failed'));
     }
 });
+exports.protect = protect;
