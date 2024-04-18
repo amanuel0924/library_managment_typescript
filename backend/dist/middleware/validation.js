@@ -14,10 +14,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Shemas = exports.validateSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
-function validateSchema(schema) {
+function validateSchema(schema, property) {
     return (req, res, next) => __awaiter(this, void 0, void 0, function* () {
         try {
-            yield schema.validateAsync(req.body, { abortEarly: false });
+            switch (property) {
+                case 'params':
+                    yield schema.validateAsync(req.params);
+                    break;
+                case 'query':
+                    yield schema.validateAsync(req.query);
+                    break;
+                default:
+                    yield schema.validateAsync(req.body);
+            }
             next();
         }
         catch (error) {
@@ -37,6 +46,16 @@ exports.Shemas = {
         login: joi_1.default.object({
             email: joi_1.default.string().email().required(),
             password: joi_1.default.string().required()
+        }),
+        update: joi_1.default.object({
+            _id: joi_1.default.string().required().regex(/^[0-9a-fA-F]{24}$/),
+            role: joi_1.default.string().valid('employee', 'admin', 'member').required(),
+            name: joi_1.default.string().required(),
+            email: joi_1.default.string().email().required(),
+            password: joi_1.default.string().required()
+        }),
+        id: joi_1.default.object({
+            id: joi_1.default.string().required().regex(/^[0-9a-fA-F]{24}$/)
         })
     }
 };

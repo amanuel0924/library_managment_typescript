@@ -7,6 +7,6 @@ const express_1 = __importDefault(require("express"));
 const authController_1 = require("../controller/authController");
 const validation_1 = require("../middleware/validation");
 const router = express_1.default.Router();
-router.route('/register').post((0, validation_1.validateSchema)(validation_1.Shemas.user.create), authController_1.register);
-router.route('/login').post((0, validation_1.validateSchema)(validation_1.Shemas.user.login), authController_1.login);
+router.route('/register').post((0, validation_1.validateSchema)(validation_1.Shemas.user.create, 'body'), authController_1.register);
+router.route('/login').post((0, validation_1.validateSchema)(validation_1.Shemas.user.login, 'body'), authController_1.login);
 exports.default = router;
