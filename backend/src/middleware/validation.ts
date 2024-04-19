@@ -20,6 +20,7 @@ export function validateSchema(schema:ObjectSchema,property:string){
                     }
             next();
         } catch (error:any) {
+            console.log(error)  
           return  res.status(422).json({message:error.details[0].message})
         }
     }
@@ -43,8 +44,9 @@ export const Shemas={
             role:Joi.string().valid('employee','admin','member').required(),
             name:Joi.string().required(),
             email:Joi.string().email().required(),
-            password:Joi.string().required()
-        }),
+            password:Joi.string().required(),
+            
+        }).unknown(),
 
         id:Joi.object<{id:string}>({
             id:Joi.string().required().regex(/^[0-9a-fA-F]{24}$/)

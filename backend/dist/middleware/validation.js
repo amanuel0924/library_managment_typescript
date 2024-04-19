@@ -30,6 +30,7 @@ function validateSchema(schema, property) {
             next();
         }
         catch (error) {
+            console.log(error);
             return res.status(422).json({ message: error.details[0].message });
         }
     });
@@ -52,8 +53,8 @@ exports.Shemas = {
             role: joi_1.default.string().valid('employee', 'admin', 'member').required(),
             name: joi_1.default.string().required(),
             email: joi_1.default.string().email().required(),
-            password: joi_1.default.string().required()
-        }),
+            password: joi_1.default.string().required(),
+        }).unknown(),
         id: joi_1.default.object({
             id: joi_1.default.string().required().regex(/^[0-9a-fA-F]{24}$/)
         })

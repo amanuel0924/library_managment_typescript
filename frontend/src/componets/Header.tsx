@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { FaBars, FaXmark,FaBookOpenReader } from "react-icons/fa6"
-import { IoSearch } from "react-icons/io5";
+import { IoSearch ,IoPersonOutline} from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom"
 import { RootState ,AppDispach} from "../redux/store"
@@ -51,11 +51,11 @@ const Hero = () => {
           </div>
 
             <div className="flex space-x-5">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4 shrink">
                 <input
                 type="text"
                 placeholder="Search"
-                className=" px-2 py-1 rounded-lg focus:outline-none placeholder:text-sm text-black text-sm"
+                className=" px-2 py-1  rounded-lg focus:outline-none placeholder:text-sm text-black text-sm"
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
                 />
@@ -63,7 +63,7 @@ const Hero = () => {
                 <IoSearch size={20} />
                 </button>
             </div>
-           {!user ?  <Link to={'/login'}>login</Link>:<Link to={`/profile/${user._id}`}>{user.name}</Link>}
+           {!user ?  <Link to={'/login'}>login</Link>:<Link className="flex space-x-3" to={`/profile/${user._id}`}> <IoPersonOutline className="border-2 rounded-full border-white mx-2" size={24}/>{user.name}</Link>}
             </div>
 
 

@@ -9,6 +9,7 @@ exports.notFound = notFound;
 const errorHandler = (error, req, res, next) => {
     let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
     let message = error.message;
+    console.log(error.stack);
     // Check for Mongoose CastError
     if (error.name === 'CastError') {
         statusCode = 404;

@@ -30,12 +30,14 @@ const getUserById=async( req:CustomRequest,res:Response,next:NextFunction )=>{
 const updateUser=async( req:CustomRequest,res:Response,next:NextFunction )=>{
     const id:string=req?.user?._id;
     const user:IUser=req.body;
+    console.log(user)   
     try {
         const updatedUser:IUserModel|null=await User.findByIdAndUpdate(id,user,{new:true});
         if(updatedUser){
             res.status(200).json({message:"success",user:updatedUser});
         }
     } catch (error:any) {
+        
         res.status(400);
         next(error)
     }

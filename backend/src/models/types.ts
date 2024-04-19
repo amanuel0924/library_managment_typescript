@@ -4,3 +4,16 @@ export interface IUser {
     email:string;
     password:string;
 }
+
+export interface IBook{
+    barcode:string;
+    title:string;
+    cover:string;
+    author:string[];
+    subjects:string[];
+    publisher:string;
+    publicationDate:Date;
+    pages:number;
+    genere:string;
+    discrption:string;
+}

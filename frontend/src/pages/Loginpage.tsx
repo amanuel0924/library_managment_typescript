@@ -23,14 +23,14 @@ export default function Loginpage(): JSX.Element {
    }
 
   useEffect(() => {
-    if(auth.isSuccess){
+    if(auth.user){
       navigate('/')
     }
    },[auth, navigate])
 
 
   return (
-    <div className="relative mx-auto w-full max-w-md mt-16 bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 sm:rounded-xl sm:px-10 ">
+    <div className="relative mx-auto w-full max-w-md mt-28 bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 sm:rounded-xl sm:px-10 ">
     <div className="w-full">
       <div className="text-center">
         <h1 className="text-3xl font-semibold text-gray-900">Sign in</h1>

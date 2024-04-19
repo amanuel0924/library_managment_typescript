@@ -6,6 +6,7 @@ import  authRouter from './routes/authRoute';
 import userRouter from './routes/userRoute';
 import { errorHandler, notFound } from './middleware/errorMidleware';
 import cors from 'cors'
+import morgan from 'morgan'
 dotenv.config();
 
 DB_connection()
@@ -19,6 +20,7 @@ app.use(cors({
     credentials: true
 }))
 app.use(cookieParser());
+app.use(morgan('dev'))
 
 app.use('/api/auth',authRouter)
 app.use('/api/user',userRouter)
