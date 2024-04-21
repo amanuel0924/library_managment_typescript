@@ -9,6 +9,7 @@ const DB_connection_1 = __importDefault(require("./config/DB_connection"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const authRoute_1 = __importDefault(require("./routes/authRoute"));
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
+const bookRoute_1 = __importDefault(require("./routes/bookRoute"));
 const errorMidleware_1 = require("./middleware/errorMidleware");
 const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
@@ -25,6 +26,7 @@ app.use((0, cookie_parser_1.default)());
 app.use((0, morgan_1.default)('dev'));
 app.use('/api/auth', authRoute_1.default);
 app.use('/api/user', userRoute_1.default);
+app.use('/api/book', bookRoute_1.default);
 app.use(errorMidleware_1.notFound);
 app.use(errorMidleware_1.errorHandler);
 app.listen(PORT, () => {

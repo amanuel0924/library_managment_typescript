@@ -36,11 +36,11 @@ const Hero = () => {
             </Link>
             <div className=" hidden h-10 font-OpenSans md:flex md:space-x-8 ">
             <div className="group">
-              <Link to="/#">Home</Link>
+              <Link to="/">Home</Link>
               <div className=" mx-2 group-hover:border-b group-hover:border-blue-50"></div>
             </div>
             <div className="group">
-              <Link to="/#">Catalog</Link>
+              <Link to="/catalog">Catalog</Link>
               <div className=" mx-2 group-hover:border-b group-hover:border-blue-50"></div>
             </div>
            

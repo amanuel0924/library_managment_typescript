@@ -57,6 +57,36 @@ exports.Shemas = {
         }).unknown(),
         id: joi_1.default.object({
             id: joi_1.default.string().required().regex(/^[0-9a-fA-F]{24}$/)
-        })
+        }),
+    },
+    book: {
+        create: joi_1.default.object({
+            barcode: joi_1.default.string().required(),
+            title: joi_1.default.string().required(),
+            cover: joi_1.default.string().required(),
+            authors: joi_1.default.array().items(joi_1.default.string()).required(),
+            subjects: joi_1.default.array().items(joi_1.default.string()).required(),
+            publisher: joi_1.default.string().required(),
+            publicationDate: joi_1.default.date().required(),
+            pages: joi_1.default.number().required(),
+            genre: joi_1.default.string().required(),
+            description: joi_1.default.string().required()
+        }).unknown(),
+        updateBook: joi_1.default.object({
+            _id: joi_1.default.string().required().regex(/^[0-9a-fA-F]{24}$/),
+            barcode: joi_1.default.string().required(),
+            title: joi_1.default.string().required(),
+            cover: joi_1.default.string().required(),
+            authors: joi_1.default.array().items(joi_1.default.string()).required(),
+            subjects: joi_1.default.array().items(joi_1.default.string()).required(),
+            publisher: joi_1.default.string().required(),
+            publicationDate: joi_1.default.date().required(),
+            pages: joi_1.default.number().required(),
+            genre: joi_1.default.string().required(),
+            description: joi_1.default.string().required()
+        }).unknown(),
+        deleteBook: joi_1.default.object({
+            barcode: joi_1.default.string().required()
+        }),
     }
 };

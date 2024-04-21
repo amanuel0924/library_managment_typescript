@@ -1,4 +1,4 @@
-import { Request,Response,NextFunction } from "express";
+import { Response,NextFunction } from "express";
 import { IUser } from "../models/types";
 import User,{IUserModel} from "../models/userModel";
 import { CustomRequest } from "./authController";

@@ -1,11 +1,5 @@
-export interface IUser {
-    role:'admin' | 'employee'|'member';
-    name:string;
-    email:string;
-    password:string;
-}
-
-export interface IBook{
+export type book={
+    _id: string;
     barcode:string;
     title:string;
     cover:string;
@@ -16,5 +10,5 @@ export interface IBook{
     pages:number;
     genre:string;
     description:string;
-    records:[]
+    records:[];
 }

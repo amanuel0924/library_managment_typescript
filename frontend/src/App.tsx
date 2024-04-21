@@ -6,7 +6,7 @@ function App() {
   return (
     <>
      <Header/>
-      <main className=" h-screen">
+      <main className="">
       <Outlet />
       </main>
       <Footer/>
