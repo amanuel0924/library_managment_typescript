@@ -9,9 +9,8 @@ interface BookProps {
 
 export const BookCard:React.FC<BookProps> = ({book}) => {
   const navigate=useNavigate()
-  console.log('on book card',book)
   return (
-    <div className=' min-w-[280px] h-[400px] mx-3 justify-center items-center shadow-md cursor-pointer p-2 rounded-lg flex flex-col' onClick={()=>navigate(`/book/${book.barcode}`)}>
+    <div className=' w-[280px] min-w-[280px] h-[400px] mx-3 justify-center items-center shadow-md cursor-pointer p-2 rounded-lg flex flex-col' onClick={()=>navigate(`/book/${book.barcode}`)}>
     
             <img src={book.cover} alt={book.title} className=' h-[45%] ' />
    

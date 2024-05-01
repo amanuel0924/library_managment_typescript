@@ -1,10 +1,13 @@
 import Joi,{ObjectSchema} from "joi";
 
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, query } from "express";
 import { IUser } from "../models/types";
 import { IUserModel } from "../models/userModel";
 import { IBook } from "../models/types";
 import { IBookModel } from "../models/bookModel";
+import { IloanRecord } from "../models/types";
+import { IloanRecordModel } from "../models/loanRecooredModel";
+
 
 
 
@@ -87,6 +90,41 @@ export const Shemas={
             deleteBook:Joi.object<{barcode:string}>({
                 barcode:Joi.string().required()
             }),
+        },
+        libraryCard:{
+            create:Joi.object<{user:string}>({
+                user:Joi.string().required().regex(/^[0-9a-fA-F]{24}$/)
+            }),
+            id:Joi.object<{id:string}>({
+                id:Joi.string().required().regex(/^[0-9a-fA-F]{24}$/)
+            })
+        },
+        loan:{
+            create:Joi.object<IloanRecord>({
+                status:Joi.string().valid('LOANED','AVAILABLE').required(),
+                item:Joi.string().required().regex(/^[0-9a-fA-F]{24}$/),
+                borrower:Joi.string().required().regex(/^[0-9a-fA-F]{24}$/),
+                dueDate:Joi.date().required(),
+                loanedDate:Joi.date().required(),
+                returnedDate:Joi.date(),
+                employeeOut:Joi.string().required().regex(/^[0-9a-fA-F]{24}$/),
+                employeeIn:Joi.string().regex(/^[0-9a-fA-F]{24}$/)
+            }),
+            update:Joi.object<IloanRecordModel>({
+                _id:Joi.string().required().regex(/^[0-9a-fA-F]{24}$/),
+                status:Joi.string().valid('LOANED','AVAILABLE').required(),
+                item:Joi.string().required().regex(/^[0-9a-fA-F]{24}$/),
+                borrower:Joi.string().required().regex(/^[0-9a-fA-F]{24}$/),
+                dueDate:Joi.date().required(),
+                loanedDate:Joi.date().required(),
+                returnedDate:Joi.date(),
+                employeeOut:Joi.string().required().regex(/^[0-9a-fA-F]{24}$/),
+                employeeIn:Joi.string().regex(/^[0-9a-fA-F]{24}$/)
+            }),
+           query:Joi.object<{property:string,value:string}>({
+                property:Joi.string().valid('status','item','borrower','dueDate','loanedDate','returnedDate','employeeOut','employeeIn').required(),
+                value:Joi.alternatives(Joi.string(),Joi.date()).required()
+              })
         }
 
     

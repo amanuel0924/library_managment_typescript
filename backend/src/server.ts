@@ -4,8 +4,12 @@ import DB_connection from './config/DB_connection';
 import dotenv from 'dotenv'
 import  authRouter from './routes/authRoute';
 import userRouter from './routes/userRoute';
-import bookRoute from './routes/bookRoute'
+import bookRoute from './routes/bookRoute';
+import card from './routes/libraryCardRoute'; 
+import loan from './routes/loanRecoredRoutes'; 
+
 import { errorHandler, notFound } from './middleware/errorMidleware';
+
 import cors from 'cors'
 import morgan from 'morgan'
 dotenv.config();
@@ -26,6 +30,8 @@ app.use(morgan('dev'))
 app.use('/api/auth',authRouter)
 app.use('/api/user',userRouter)
 app.use('/api/book',bookRoute)
+app.use('/api/card',card)
+app.use('/api/loan',loan)
 
 
 app.use(notFound)

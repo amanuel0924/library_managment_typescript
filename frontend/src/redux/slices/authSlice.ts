@@ -6,6 +6,7 @@ import axios  from "axios";
 interface AuthSliceState{
      user:User|undefined,
      profileUser:User|undefined,
+     libraryCard:string,
      isError:boolean,
      isLoading:boolean,
      isSuccess:boolean,
@@ -18,6 +19,7 @@ const initialState:AuthSliceState={
     ? JSON.parse(localStorage.getItem("user")as string)
     : undefined,
     profileUser:undefined,
+    libraryCard:'',
     isError:false,
     isLoading:false,
     isSuccess:false
@@ -73,6 +75,17 @@ const updateUser=createAsyncThunk('auth/updateUser',async(user:User,thunkAPI)=>{
     }
 })
 
+const getLibraryCard=createAsyncThunk('auth/getLibraryCard',async(id:string,thunkAPI)=>{
+    try {
+        axios.defaults.withCredentials=true
+        const response= await axios.post(`http://localhost:9090/api/card`,{user:id})
+        console.log(response.data.libraryCard)
+        return response.data.libraryCard
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error)
+    }
+}
+)
 const AuthSlice= createSlice({
     name:'auth',
     initialState,
@@ -161,9 +174,26 @@ const AuthSlice= createSlice({
             state.isSuccess=false
             state.isError=true
         })
+
+        builder.addCase(getLibraryCard.pending,(state)=>{
+            state.isLoading=true
+            state.isError=false
+        }),
+        builder.addCase(getLibraryCard.fulfilled,(state,action)=>{
+            state.isLoading=false
+            state.isSuccess=true
+            state.isError=false
+            state.libraryCard=action.payload
+        }), 
+        builder.addCase(getLibraryCard.rejected,(state)=>{
+            state.isLoading=false
+            state.isSuccess=false
+            state.isError=true
+        })
+
     }
 })
 
-export {login,register,fetchUser,updateUser}
+export {login,register,fetchUser,updateUser,getLibraryCard}
 export const  {logout}=AuthSlice.actions
 export default AuthSlice.reducer

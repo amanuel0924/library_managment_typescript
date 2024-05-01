@@ -11,6 +11,7 @@ import { Provider } from 'react-redux'
 import { Profilepage } from './pages/Profilepage.tsx'
 import { PrivateRoute } from './componets/PrivateRoute.tsx'
 import { Catalogpage } from './pages/Catalogpage.tsx'
+import { RegisterLibraryCardpage } from './pages/RegisterLibraryCardpage.tsx'
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<App />}>
@@ -18,6 +19,7 @@ const router = createBrowserRouter(createRoutesFromElements(
      <Route path="/login" element={<Loginpage/>} />
      <Route path="/register" element={<Register/>} />
       <Route path="/catalog" element={<Catalogpage />} />
+      <Route path="/register-library-card" element={<RegisterLibraryCardpage />} />
       <Route path="" element={<PrivateRoute />}>
         <Route path='/profile/:id' element={<Profilepage />} />
       </Route>

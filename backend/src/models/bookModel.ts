@@ -1,3 +1,4 @@
+import { loanRecordSchema } from "./loanRecooredModel";
 import { IBook } from "./types";
 import mongoose,{Schema,Document} from "mongoose";
 
@@ -15,7 +16,7 @@ const bookSchema:Schema = new Schema({
     pages:{type:Number,required:true},
     genre:{type:String,required:true},
     description:{type:String,required:true},
-    records:[],
+    records:[loanRecordSchema],
 
 });
 

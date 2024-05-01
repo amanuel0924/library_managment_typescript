@@ -9,8 +9,9 @@ import { RootState ,AppDispach} from "../redux/store"
 const Hero = () => {
   const [menu, setMenu] = useState(true)
   const [keyword, setKeyword] = useState("")
-  //const  navigate=useNavigate()
+  const  navigate=useNavigate()
   const user = useSelector((state:RootState) => state.auth.user)
+
   
  
 
@@ -18,8 +19,10 @@ const Hero = () => {
 
 
     const searchHandler = () => {
-      console.log(keyword)
-      setKeyword("")
+     
+     if(keyword) {
+     navigate(`/catalog?barcode=${keyword}&title=${keyword}&author=${keyword}&genre=${keyword}`)
+     }  
 
     }
   const handleMenu = () => {

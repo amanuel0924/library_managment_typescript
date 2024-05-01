@@ -23,8 +23,8 @@ export const CatalogOvereview:React.FC = () => {
     <>{
        books.length>0 && !loading?(
         <div className=' w-full h-fit'>
-            <h2>Wellcome to our Library, we currently have {books&&books.length} books.</h2>
-            <h4>browse our selected book bellow, or serch some books on the naviggation</h4>
+            <h2 className=' text-3xl font-bold'>Wellcome to our Library, we currently have {books&&books.length} books.</h2>
+            <h4 className='text-lg font-semibold'>browse our selected book bellow, or serch some books on the naviggation</h4>
             {
                     genres.map((genre)=>(
                         <CatalogOvereviewSection key={genre} books={getRandomBookbyGenere(books,genre)} lable={genre}/>

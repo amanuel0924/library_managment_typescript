@@ -12,3 +12,11 @@ export type book={
     description:string;
     records:[];
 }
+
+export type PageInfo={
+    totalCount:number;
+    totalPages:number;
+    currentPage:number;
+    pageCount:number;
+    limit:number;
+}
